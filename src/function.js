@@ -7,6 +7,10 @@ function setSprite(core, path, width, height) {
 function setCommunication() {
 
 }
+
+function setSelector() {
+  
+}
 /*
 function setBackGroundImage(core,stage,args){
   const backImage = new Sprite(256, 48);

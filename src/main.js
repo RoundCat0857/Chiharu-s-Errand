@@ -7,7 +7,7 @@ window.onload = function () {
   core.onload = function() {
     const stage = new Group()
     //const menu =
-    startMenu(core,stage)
+    startMenu(core)
 
     //core.currentScene.addChild(menu)
   }
