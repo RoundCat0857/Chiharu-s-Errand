@@ -1,7 +1,8 @@
 function startMenu(core) {
   const menu = new Group()
   const menuBack = setSprite(core, '../image/scene/menu.png', 320, 240)
-  const selector = menuSelector(core, {1:'初めから', 2:'続きから', 3:'ゲームを終了'})
+  const option = select['menu']
+  const selector = menuSelector(core, option)
   selector.y = 75
   menu.addChild(menuBack)
   menu.addChild(selector)
@@ -15,12 +16,12 @@ function menuSelector(core, object) {
   sprite.scale(0.3, 0.5)
   group.addChild(sprite)
   for (let k in object) {
-    const text = new Label(object[k])
+    const text = new Label(object[k].text)
     text.font  = "12px"
     text.color = "rgb(255, 255, 255)"
     text.textAlign = "center"
     text.x = 10
-    text.y = 40 + 18 * k
+    text.y = 56 + 18 * k
     group.addChild(text)
   }
   return group
