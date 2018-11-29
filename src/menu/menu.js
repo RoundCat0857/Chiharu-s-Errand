@@ -24,5 +24,28 @@ function menuSelector(core, object) {
     text.y = 56 + 18 * k
     group.addChild(text)
   }
+  const text = new Label('▶︎　　　　　　　◀︎')
+  text.font  = "12px"
+  text.color = "rgb(255, 255, 255)"
+  text.textAlign = "center"
+  text.x = 10
+  text.y = 56
+  text.addEventListener('enterframe', function() {
+    if (core.input.down) {
+      if (text.y >= 92) {
+        text.y = 56
+      } else {
+        text.y += 18
+      }
+    }
+    if (core.input.up) {
+      if (text.y <= 56) {
+        text.y = 92
+      } else {
+        text.y -= 18
+      }
+    }
+  })
+  group.addChild(text)
   return group
 }
