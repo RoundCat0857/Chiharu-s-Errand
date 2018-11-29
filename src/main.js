@@ -6,10 +6,7 @@ window.onload = function () {
   core.fps = 10
   core.onload = function() {
     const stage = new Group()
-    //const menu =
     startMenu(core)
-
-    //core.currentScene.addChild(menu)
   }
   core.start()
 }
