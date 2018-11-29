@@ -46,6 +46,21 @@ function menuSelector(core, object) {
       }
     }
   })
+  document.addEventListener('keydown', function(e) {
+    if (e.keyCode === 13) {
+      switch(text.y) {
+        case 56:
+          console.log('初めから')
+          break
+        case 74:
+          console.log('続きから')
+          break
+        case 92:
+          window.open('about:blank','_self').close()
+          break
+      }
+    }
+  })
   group.addChild(text)
   return group
 }
