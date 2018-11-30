@@ -16,12 +16,6 @@ function startChapter(n) {
   console.log('第' + n + '章 \n ~  ~ \n 的なオープニングカット')
 }
 
-function getImagePath(paths) {
-  rawPaths = path.map((path) => {
-    return '../../image/' + path
-  })
-  return rawPaths
-}
 /*
 function setBackGroundImage(core,stage,args){
   const backImage = new Sprite(256, 48);
