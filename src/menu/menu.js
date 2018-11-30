@@ -1,8 +1,7 @@
 function startMenu(core) {
   const menu = new Group()
-  const menuBack = setSprite(core, '../image/scene/menu.png', 320, 240)
-  const option = select['menu']
-  const selector = menuSelector(core, option)
+  const menuBack = setSprite(core, '../../image/scene/menu.png', 320, 240)
+  const selector = menuSelector(core, {0: '初めから', 1: '続きから', 2: 'ゲームを終了'})
   selector.y = 75
   menu.addChild(menuBack)
   menu.addChild(selector)
@@ -12,11 +11,11 @@ function startMenu(core) {
 function menuSelector(core, object) {
   const group = new Group()
   const sprite = new Sprite(320, 160)
-  sprite.image = core.assets['../image/texture/message.png']
+  sprite.image = core.assets['../../image/texture/message.png']
   sprite.scale(0.3, 0.5)
   group.addChild(sprite)
   for (let k in object) {
-    const text = new Label(object[k].text)
+    const text = new Label(object[k])
     text.font  = "12px"
     text.color = "rgb(255, 255, 255)"
     text.textAlign = "center"
@@ -50,7 +49,7 @@ function menuSelector(core, object) {
     if (e.keyCode === 13) {
       switch(text.y) {
         case 56:
-          console.log('初めから')
+          window.location.href = './chapter1.html'
           break
         case 74:
           console.log('続きから')

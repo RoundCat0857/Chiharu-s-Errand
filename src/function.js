@@ -9,7 +9,14 @@ function setCommunication() {
 }
 
 function setSelector() {
-  
+
+}
+
+function getImagePath(paths) {
+  rawPaths = path.map((path) => {
+    return '../../image/' + path
+  })
+  return rawPaths
 }
 /*
 function setBackGroundImage(core,stage,args){
