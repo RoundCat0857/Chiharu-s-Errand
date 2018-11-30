@@ -12,6 +12,10 @@ function setSelector() {
 
 }
 
+function startChapter(n) {
+  console.log('第' + n + '章 \n ~  ~ \n 的なオープニングカット')
+}
+
 function getImagePath(paths) {
   rawPaths = path.map((path) => {
     return '../../image/' + path
