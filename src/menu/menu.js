@@ -1,62 +1,39 @@
 function startMenu(core) {
-  const menu = new Group()
-  const menuBack = setSprite(core, '../../image/scene/menu.png', 320, 240)
+  const menu = new Scene()
+  const menuBack = setSprite(core, '../image/scene/menu.png', 320, 240)
   const selector = menuSelector(core, {0: '初めから', 1: '続きから', 2: 'ゲームを終了'})
   selector.y = 75
   menu.addChild(menuBack)
   menu.addChild(selector)
-  core.currentScene.addChild(menu)
+  return menu
 }
 
 function menuSelector(core, object) {
-  const group = new Group()
+  const group = new Scene()
   const sprite = new Sprite(320, 160)
-  sprite.image = core.assets['../../image/texture/message.png']
+  sprite.image = core.assets['../image/texture/message.png']
   sprite.scale(0.3, 0.5)
   group.addChild(sprite)
   for (let k in object) {
-    const text = new Label(object[k])
-    text.font  = "12px"
-    text.color = "rgb(255, 255, 255)"
+    const text = addText(object[k], 10, 54 + 18 * k)
     text.textAlign = "center"
-    text.x = 10
-    text.y = 56 + 18 * k
     group.addChild(text)
   }
-  const text = new Label('▶︎　　　　　　　◀︎')
-  text.font  = "12px"
-  text.color = "rgb(255, 255, 255)"
+  const text = addText('▶︎　　　　　　　　　　　　　　　　　　◀︎', 10, 54)
   text.textAlign = "center"
-  text.x = 10
-  text.y = 56
   text.addEventListener('enterframe', function() {
     if (core.input.down) {
-      if (text.y >= 92) {
-        text.y = 56
+      if (text.y >= 90) {
+        text.y = 54
       } else {
         text.y += 18
       }
     }
     if (core.input.up) {
-      if (text.y <= 56) {
-        text.y = 92
+      if (text.y <= 54) {
+        text.y = 90
       } else {
         text.y -= 18
-      }
-    }
-  })
-  document.addEventListener('keydown', function(e) {
-    if (e.keyCode === 13) {
-      switch(text.y) {
-        case 56:
-          window.location.href = './chapter1.html'
-          break
-        case 74:
-          console.log('続きから')
-          break
-        case 92:
-          window.open('about:blank','_self').close()
-          break
       }
     }
   })

@@ -4,6 +4,23 @@ function setSprite(core, path, width, height) {
   return sprite
 }
 
+function addText(str, x, y, font, color) {
+  const text = new Label(str)
+  if (font) {
+    text.font = font
+  } else {
+    text.font = "10px monospace"
+  }
+  if (color) {
+    text.color = color
+  } else {
+    text.color = "rgb(255, 255, 255)"
+  }
+  text.x = x
+  text.y = y
+  return text
+}
+
 function setCommunication() {
 
 }
@@ -14,6 +31,10 @@ function setSelector() {
 
 function startChapter(n) {
   console.log('第' + n + '章 \n ~  ~ \n 的なオープニングカット')
+}
+
+function setMap() {
+
 }
 
 /*
