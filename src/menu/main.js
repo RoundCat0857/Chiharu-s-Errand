@@ -3,10 +3,7 @@ document.write("<script type='text/javascript' src='./menu/menu.js'></script>")
 
 window.onload = function () {
   const core = new Core(320, 240)
-  const images = ['scene/menu.png', 'texture/message.png']
-  images.forEach((image) => {
-    core.preload('../image/' + image)
-  })
+  setPreload(core, ['scene/menu.png', 'texture/message.png', 'texture/interior1.png'])
   core.fps = 10
   core.onload = function() {
     const menu = startMenu(core)
