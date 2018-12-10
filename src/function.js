@@ -42,11 +42,9 @@ function startChapter(n) {
 function setMap(core, stage, image) {
   const { field, object, collision, start, next, back } = stage
   const map = new Map(16,16)
-  console.log(core.assets/*['../image/texture/interior.png']*/)
   map.image = core.assets['../image/' + image]
   map.loadData(field)
   // map.collisionData = collision
-  console.log(map.image)
   return map
 }
 

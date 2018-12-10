@@ -12,9 +12,7 @@ function chapter1(core, stage) {
     const chiharuRoom = setMap(core, map['chiharuRoom'], images[0])
     const stage = new Scene()
     stage.addChild(chiharuRoom)
-    console.log(stage)
     core.currentScene.addChild(stage)
     core.pushScene(stage)
   }
-  console.log(core)
 }
