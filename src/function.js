@@ -39,12 +39,22 @@ function startChapter(n) {
   console.log('第' + n + '章 \n ~  ~ \n 的なオープニングカット')
 }
 
-function setMap(core, stage, image) {
-  const { field, object, collision, start, next, back } = stage
+function setStage(core, mapObj, image) {
+  const stage = new Scene()
+  const { field, objects, collision, start, next, back } = mapObj
+  const map = setMap(core, field, image)
+  map.collisionData = collision
+  const forergoundMap = setMap(core, objects, image)
+  stage.addChild(map)
+  stage.addChild(forergoundMap)
+  // map.collisionData = collision
+  return stage
+}
+
+function setMap(core, mapArray, image) {
   const map = new Map(16,16)
   map.image = core.assets['../image/' + image]
-  map.loadData(field)
-  // map.collisionData = collision
+  map.loadData(mapArray)
   return map
 }
 
