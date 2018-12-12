@@ -42,13 +42,9 @@ function startChapter(n) {
 function setStage(core, mapObj, image) {
   const stage = new Scene()
   const { field, objects, collision } = mapObj
-  try {
-    const map = setMap(core, field, image)
-    map.collisionData = collision
-    const forergoundMap = setMap(core, objects, image)
-  } catch(e) {
-    console.log(e);
-  }
+  const map = setMap(core, field, image)
+  map.collisionData = collision
+  const forergoundMap = setMap(core, objects, image)
   stage.addChild(map)
   stage.addChild(forergoundMap)
   return stage
