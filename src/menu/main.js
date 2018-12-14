@@ -3,7 +3,7 @@ document.write("<script type='text/javascript' src='./menu/menu.js'></script>")
 
 window.onload = function () {
   const core = new Core(320, 240)
-  setPreload(core, ['scene/menu.png', 'texture/message.png', 'texture/interior1.png'])
+  setPreload(core, ['scene/menu.png', 'texture/message.png', 'texture/interior1.png', 'texture/char_p03.png'])
   core.fps = 10
   core.onload = function() {
     const menu = startMenu(core)
