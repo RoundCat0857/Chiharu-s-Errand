@@ -39,6 +39,23 @@ function startChapter(n) {
   console.log('第' + n + '章 \n ~  ~ \n 的なオープニングカット')
 }
 
+function addChilds(stage, arr) {
+  arr.forEach((obj) => {
+    stage.addChild(obj)
+  })
+}
+
+function keepMapCenter(core, stage, map, player) {
+  core.currentScene.addEventListener('enterframe', function(e) {
+    var x = Math.min((core.width  - 32) / 2 - player.x, 0) // playerの位置がマップ半分まで到達？
+    var y = Math.min((core.height - 32) / 2 - player.y, 0)
+    x = Math.max(core.width , x + map.width)  - map.width // playerの位置がマップ右端まで到達？
+    y = Math.max(core.height, y + map.height) - map.height
+    stage.x = x // stageの座標をセット
+    stage.y = y
+  })
+}
+
 function setStage(core, mapObj, image) {
   const { field, objects, collision } = mapObj
   const map = setMap(core, field, image)
@@ -56,7 +73,6 @@ function setMap(core, mapArray, image) {
 
 function walk(core, map, human) {
   human.addEventListener('enterframe', function () {
-    console.log(this.isMoving);
     if(this.isMoving) {
       this.moveBy(this.vx, this.vy)
       if (!(core.frame % 3)) {
@@ -90,38 +106,3 @@ function walk(core, map, human) {
     }
   })
 }
-/*
-function setBackGroundImage(core,stage,args){
-  const backImage = new Sprite(256, 48);
-  backImage.image = core.assets[args];
-  //backImage.scale(0.5,0.5)
-  const {x,y} = stage
-  backImage.x = 0 - x;
-  backImage.y = 144 - y;
-  stage.addChild(backImage);
-}
-
-function setChoiceScene(stage,object){
-  //選択肢１
-  const {x,y} = stage
-  for (let k in object) {
-    const text = new Label(object[k]);
-    text.font  = "8px";
-    text.color = "rgb(255, 255, 255)";
-    text.y = 152 + 10 * k - y;
-    text.x = 10 - x;
-    text.width = 246;
-    text.height = 8;
-    stage.addChild(text);
-  }
-}
-
-function awaitForKeydown(document) {
-  return new Promise((resolve, reject) => {
-    document.addEventListener('keydown', resolve)
-    if (!resolve) {
-      resolve()
-    }
-  })
-}
-*/
