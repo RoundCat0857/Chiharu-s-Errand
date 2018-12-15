@@ -9,12 +9,11 @@ function chapter1(core, stage) {
     const { start, next } = chiharuRoom
     const [map, forergoundMap] = setStage(core, chiharuRoom, images[0])
     const stage = new Scene()
-    stage.addChild(map)
-    stage.addChild(forergoundMap)
     const chiharu = new Human(core, 'Chiharu', images[1], start, 1, 7)
-    walk(core, map, chiharu)
-    stage.addChild(chiharu)
-    core.currentScene.addChild(stage)
+    addChilds(stage, [map, forergoundMap, chiharu])
     core.pushScene(stage)
+
+    walk(core, map, chiharu)
+    keepMapCenter(core, stage, map, chiharu)
   }
 }
