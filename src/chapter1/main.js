@@ -30,8 +30,9 @@ function chapter1(core, stageName) {
     const { stairs, door } = living
     const [map, forergoundMap] = setStage(core, living, images[0])
     const chiharu = new Human(core, 'Chiharu', images[1], stairs[1], 1, 7)
+    const mother = new Human(core, 'Mom', images[1], {x: 5 * 16 + 12, y: 5 * 16 }, 5, 7)
     const stage = new Scene()
-    addChilds(stage, [map, forergoundMap, chiharu])
+    addChilds(stage, [map, forergoundMap, chiharu, mother])
     core.pushScene(stage)
 
     walk(core, map, chiharu)
