@@ -9,10 +9,20 @@ const Human = enchant.Class.create(enchant.Sprite, {
     this.frame = frame
     this.walk = 1
   },
-  walk: function(x, y){
-    this.tl.clear();
-    this.tl.repeat(function(){
-      this.frame = this.age % 2 + 5;
-    }, 30).and().moveTo(x, y, 30);
+  walkTo: function(x, y) {
+    if (this.y < y) {
+      this.frame = 7
+      this.moveTo(this.x, y)
+    } else if (this.y > y) {
+      this.frame = 1
+      this.moveTo(this.x, y)
+    }
+    if (this.x < x) {
+      this.frame = 4
+      this.moveTo(x, this.y)
+    } else if (this.x > x) {
+      this.frame = 10
+      this.moveTo(x, this.y)
+    }
   }
 })
