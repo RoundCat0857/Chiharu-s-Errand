@@ -10,19 +10,31 @@ const Human = enchant.Class.create(enchant.Sprite, {
     this.walk = 1
   },
   walkTo: function(x, y) {
-    if (this.y < y) {
-      this.frame = 7
-      this.moveTo(this.x, y)
-    } else if (this.y > y) {
-      this.frame = 1
-      this.moveTo(this.x, y)
-    }
-    if (this.x < x) {
-      this.frame = 4
-      this.moveTo(x, this.y)
-    } else if (this.x > x) {
-      this.frame = 10
-      this.moveTo(x, this.y)
-    }
+    this.addEventListener('enterframe', function() {
+      const { age } = this
+      console.log(this.x, this.y);
+      if (this.age % 2 === 0) {
+        if (this.y !== y) {
+          if (this.y < y) {
+            this.frame = 6 + age % 3
+            this.moveBy(0, 16)
+          } else if (this.y > y) {
+            this.frame = 2 + age % 3
+            this.moveBy(0, -16)
+          }
+        } else {
+          if (this.x < x) {
+            this.frame = 3 + age % 3
+            this.moveBy(16, 0)
+          } else if (this.x > x) {
+            this.frame = 9 + age % 3
+            this.moveBy(-16, 0)
+          }
+        }
+      }
+      if (this.x === x && this.y === y) {
+        this.clearEventListener('enterframe')
+      }
+    })
   }
 })
