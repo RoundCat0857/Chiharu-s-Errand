@@ -36,10 +36,16 @@ function chapter1(core, stageName) {
     core.pushScene(stage)
 
     walk(core, map, chiharu)
-    chiharu.addEventListener('enterframe', function () {
-      if (this.x === 9 * 16 + 12) {
-        mother.walkTo(this.x -16, this.y)
-      }
-    })
+    let talkFlag = 0
+    if (!talkFlag) {
+      chiharu.addEventListener('enterframe', function() {
+        if (this.x === 9 * 16 + 12) {
+          mother.walkTo(this.x - 16, this.y)
+          this.clearEventListener('enterframe')
+          walk(core, map, chiharu)
+          talkFlag = 1
+        }
+      })
+    }
   }
 }
