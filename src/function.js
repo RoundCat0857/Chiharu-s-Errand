@@ -59,7 +59,7 @@ function keepMapCenter(core, stage, map, player) {
 function setStage(core, mapObj, image) {
   const { field, objects, collision } = mapObj
   const map = setMap(core, field, image)
-  map.collisionData = collision
+  map.collisionData = JSON.parse(JSON.stringify(collision))
   const forergoundMap = setMap(core, objects, image)
   return [map, forergoundMap]
 }
@@ -69,40 +69,4 @@ function setMap(core, mapArray, image) {
   map.image = core.assets['../image/' + image]
   map.loadData(mapArray)
   return map
-}
-
-function walk(core, map, human) {
-  human.addEventListener('enterframe', function () {
-    if(this.isMoving) {
-      this.moveBy(this.vx, this.vy)
-      if (!(core.frame % 3)) {
-        this.walk += 1
-        this.walk %= 3
-      }
-      this.frame = this.direction * 3 + this.walk
-      this.isMoving = false
-    } else {
-      this.walk = 1
-      this.vx = this.vy = 0
-      if (core.input.left) {
-        this.direction = 3;
-        this.vx = -16;
-      } else if (core.input.right) {
-        this.direction = 1;
-        this.vx = 16;
-      } else if (core.input.up) {
-        this.direction = 0;
-        this.vy = -16;
-      } else if (core.input.down) {
-        this.direction = 2;
-        this.vy = 16;
-      }
-      const x = this.x + this.vx + 16;
-      const y = this.y + this.vy + 16;
-      if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y) && (this.vx || this.vy)) {
-        this.isMoving = true
-        arguments.callee.call(this)
-      }
-    }
-  })
 }
