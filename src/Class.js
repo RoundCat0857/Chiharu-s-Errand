@@ -1,17 +1,63 @@
 const Human = enchant.Class.create(enchant.Sprite, {
-  initialize: function(core, name, imagePath, start, char, frame){
+  initialize: function(core, name, imagePath, start, char, frame, direction){
     enchant.Sprite.call(this, 24, 32);
     this.x = start.x
     this.y = start.y
+    this.vx = this.vy = 0
     const image = new Surface(72, 128)
     image.draw(core.assets['../image/' + imagePath], (char%4) * 72, Math.floor(char / 4) * 128, 72, 128, 0, 0, 72, 128)
     this.image = image
     this.frame = frame
+    this.direction = direction || 2
     this.walk = 1
+    this.isMoving = true
+    this.addEventListener('enterframe', function () {
+      if(this.isMoving) {
+        core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 0
+        this.moveBy(this.vx, this.vy)
+        core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
+        this.frame = this.direction * 3 + this.walk
+        if (!(core.frame % 3)) {
+          this.walk += 1
+          this.walk %= 3
+        }
+        this.isMoving = false
+        this.vx = this.vy = 0
+      }
+    })
   },
+  walking: function(core, map) {
+    this.addEventListener('enterframe', function () {
+      if(!this.isMoving) {
+        if (core.input.left) {
+          this.direction = 3;
+          this.vx = -16;
+        } else if (core.input.right) {
+          this.direction = 1;
+          this.vx = 16;
+        } else if (core.input.up) {
+          this.direction = 0;
+          this.vy = -16;
+        } else if (core.input.down) {
+          this.direction = 2;
+          this.vy = 16;
+        }
+        const x = this.x + this.vx + 16;
+        const y = this.y + this.vy + 16;
+        if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y) && (this.vx || this.vy)) {
+          this.isMoving = true
+          arguments.callee.call(this)
+        } else {
+          this.frame = this.direction * 3 + 1
+          this.vx = this.vy = 0
+        }
+      }
+    })
+  },/*
   collision: function(core) {
     core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
-  },
+  },*/
+
   walkTo: function(x, y) {
     return new Promise((resolve, reject) => {
       this.addEventListener('enterframe', function() {
@@ -19,19 +65,23 @@ const Human = enchant.Class.create(enchant.Sprite, {
         if (this.age % 2 === 0) {
           if (this.y !== y) {
             if (this.y < y) {
-              this.frame = 6 + age % 3
-              this.moveBy(0, 16)
+              this.direction = 2
+              this.vy = 16
+              this.isMoving = true
             } else if (this.y > y) {
-              this.frame = 2 + age % 3
-              this.moveBy(0, -16)
+              this.direction = 0
+              this.vy = -16
+              this.isMoving = true
             }
           } else {
             if (this.x < x) {
-              this.frame = 3 + age % 3
-              this.moveBy(16, 0)
+              this.direction = 1
+              this.vx = 16
+              this.isMoving = true
             } else if (this.x > x) {
-              this.frame = 9 + age % 3
-              this.moveBy(-16, 0)
+              this.direction = 3
+              this.vx = -16
+              this.isMoving = true
             }
           }
         }
