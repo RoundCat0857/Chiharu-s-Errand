@@ -37,7 +37,9 @@ function chapter1(core, stageName) {
     chiharu.walking(core, map)
     chiharu.addEventListener('enterframe', async function() {
       if (this.x === 9 * 16 + 12 && !flag1.carrot) {
+        chiharu.pause()
         await mother.walkTo(this.x - 16, this.y)
+        chiharu.walking(core, map)
         flag1.carrot = 1
       }
     })
