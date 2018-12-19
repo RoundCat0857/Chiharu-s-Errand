@@ -53,42 +53,36 @@ const Human = enchant.Class.create(enchant.Sprite, {
         }
       }
     })
-  },/*
-  collision: function(core) {
-    core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
-  },*/
-
+  },
   walkTo: function(x, y) {
     return new Promise((resolve, reject) => {
       this.addEventListener('enterframe', function() {
         const { age } = this
-        if (this.age % 2 === 0) {
-          if (this.y !== y) {
-            if (this.y < y) {
-              this.direction = 2
-              this.vy = 16
-              this.isMoving = true
-            } else if (this.y > y) {
-              this.direction = 0
-              this.vy = -16
-              this.isMoving = true
-            }
-          } else {
-            if (this.x < x) {
-              this.direction = 1
-              this.vx = 16
-              this.isMoving = true
-            } else if (this.x > x) {
-              this.direction = 3
-              this.vx = -16
-              this.isMoving = true
-            }
-          }
-        }
         if (this.x === x && this.y === y) {
           this.frame = Math.floor(this.frame / 3) * 3 + 1
           this.clearEventListener('enterframe')
           resolve(true)
+        } else {
+          this.isMoving = true
+          if (this.age % 2 === 0) {
+            if (this.y !== y) {
+              if (this.y < y) {
+                this.direction = 2
+                this.vy = 16
+              } else if (this.y > y) {
+                this.direction = 0
+                this.vy = -16
+              }
+            } else {
+              if (this.x < x) {
+                this.direction = 1
+                this.vx = 16
+              } else if (this.x > x) {
+                this.direction = 3
+                this.vx = -16
+              }
+            }
+          }
         }
       })
     })
