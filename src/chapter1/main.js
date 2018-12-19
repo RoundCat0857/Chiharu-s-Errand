@@ -20,8 +20,7 @@ function chapter1(core, stageName) {
     const stage = new Scene()
     addChilds(stage, [map, forergoundMap, chiharu])
     core.pushScene(stage)
-
-    walk(core, map, chiharu)
+    chiharu.walking(core, map)
     moveMap(core, chiharu, 'living', stairs)
     keepMapCenter(core, stage, map, chiharu)
   } else if (stageName === 'living') {
@@ -35,21 +34,14 @@ function chapter1(core, stageName) {
     const stage = new Scene()
     addChilds(stage, [map, forergoundMap, chiharu, mother])
     core.pushScene(stage)
-    walk(core, map, chiharu)
-    if (!flag1.carrot) {
-      chiharu.addEventListener('enterframe', async function () {
-        if (this.x === 9 * 16 + 12) {
-          this.clearEventListener('enterframe')
-          await mother.walkTo(this.x - 16, this.y)
-          mother.collision(core)
-          walk(core, map, chiharu)
-          moveMap(core, chiharu, 'chiharuRoom', stairs)
-          flag1.carrot = 1
-        }
-      })
-    } else {
-      mother.collision(core)
-    }
+    chiharu.walking(core, map)
+    chiharu.addEventListener('enterframe', async function() {
+      if (this.x === 9 * 16 + 12 && !flag1.carrot) {
+        await mother.walkTo(this.x - 16, this.y)
+        flag1.carrot = 1
+      }
+    })
+
     moveMap(core, chiharu, 'chiharuRoom', stairs)
     keepMapCenter(core, stage, map, chiharu)
   }
