@@ -12,7 +12,6 @@ const Human = enchant.Class.create(enchant.Sprite, {
   walkTo: function(x, y) {
     this.addEventListener('enterframe', function() {
       const { age } = this
-      console.log(this.x, this.y);
       if (this.age % 2 === 0) {
         if (this.y !== y) {
           if (this.y < y) {
@@ -33,6 +32,7 @@ const Human = enchant.Class.create(enchant.Sprite, {
         }
       }
       if (this.x === x && this.y === y) {
+        this.frame = Math.floor(this.frame / 3) * 3 + 1
         this.clearEventListener('enterframe')
       }
     })
