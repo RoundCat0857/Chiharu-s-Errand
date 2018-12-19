@@ -11,7 +11,7 @@ const Human = enchant.Class.create(enchant.Sprite, {
     this.direction = direction || 2
     this.walk = 1
     this.isMoving = true
-    this.addEventListener('enterframe', function () {
+    this.addEventListener('enterframe', function move() {
       if(this.isMoving) {
         core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 0
         this.moveBy(this.vx, this.vy)
@@ -27,7 +27,7 @@ const Human = enchant.Class.create(enchant.Sprite, {
     })
   },
   walking: function(core, map) {
-    this.addEventListener('enterframe', function () {
+    this.addEventListener('enterframe', function walk() {
       if(!this.isMoving) {
         if (core.input.left) {
           this.direction = 3;
@@ -46,13 +46,19 @@ const Human = enchant.Class.create(enchant.Sprite, {
         const y = this.y + this.vy + 16;
         if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y) && (this.vx || this.vy)) {
           this.isMoving = true
-          arguments.callee.call(this)
         } else {
           this.frame = this.direction * 3 + 1
           this.vx = this.vy = 0
         }
       }
     })
+  },
+  pause: function(core, map) {
+    for (let e of this._listeners.enterframe) {
+      if (e.name === 'walk') {
+        this.removeEventListener('enterframe', e)
+      }
+    }
   },
   walkTo: function(x, y) {
     return new Promise((resolve, reject) => {
