@@ -9,32 +9,38 @@ const Human = enchant.Class.create(enchant.Sprite, {
     this.frame = frame
     this.walk = 1
   },
+  collision: function(core) {
+    core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
+  },
   walkTo: function(x, y) {
-    this.addEventListener('enterframe', function() {
-      const { age } = this
-      if (this.age % 2 === 0) {
-        if (this.y !== y) {
-          if (this.y < y) {
-            this.frame = 6 + age % 3
-            this.moveBy(0, 16)
-          } else if (this.y > y) {
-            this.frame = 2 + age % 3
-            this.moveBy(0, -16)
-          }
-        } else {
-          if (this.x < x) {
-            this.frame = 3 + age % 3
-            this.moveBy(16, 0)
-          } else if (this.x > x) {
-            this.frame = 9 + age % 3
-            this.moveBy(-16, 0)
+    return new Promise((resolve, reject) => {
+      this.addEventListener('enterframe', function() {
+        const { age } = this
+        if (this.age % 2 === 0) {
+          if (this.y !== y) {
+            if (this.y < y) {
+              this.frame = 6 + age % 3
+              this.moveBy(0, 16)
+            } else if (this.y > y) {
+              this.frame = 2 + age % 3
+              this.moveBy(0, -16)
+            }
+          } else {
+            if (this.x < x) {
+              this.frame = 3 + age % 3
+              this.moveBy(16, 0)
+            } else if (this.x > x) {
+              this.frame = 9 + age % 3
+              this.moveBy(-16, 0)
+            }
           }
         }
-      }
-      if (this.x === x && this.y === y) {
-        this.frame = Math.floor(this.frame / 3) * 3 + 1
-        this.clearEventListener('enterframe')
-      }
+        if (this.x === x && this.y === y) {
+          this.frame = Math.floor(this.frame / 3) * 3 + 1
+          this.clearEventListener('enterframe')
+          resolve(true)
+        }
+      })
     })
   }
 })

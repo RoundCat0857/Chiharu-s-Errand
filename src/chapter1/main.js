@@ -31,21 +31,24 @@ function chapter1(core, stageName) {
     const { x, y } = stairs[1]
     const chiharu = new Human(core, 'Chiharu', images[1], { x: x + 16, y: y }, 1, 7)
     const mother = new Human(core, 'Mom', images[1], {x: 5 * 16 + 12, y: 5 * 16 }, 5, 7)
+
     const stage = new Scene()
     addChilds(stage, [map, forergoundMap, chiharu, mother])
     core.pushScene(stage)
-
     walk(core, map, chiharu)
     if (!flag1.carrot) {
-      chiharu.addEventListener('enterframe', function () {
+      chiharu.addEventListener('enterframe', async function () {
         if (this.x === 9 * 16 + 12) {
-          mother.walkTo(this.x - 16, this.y)
           this.clearEventListener('enterframe')
+          await mother.walkTo(this.x - 16, this.y)
+          mother.collision(core)
           walk(core, map, chiharu)
           moveMap(core, chiharu, 'chiharuRoom', stairs)
           flag1.carrot = 1
         }
       })
+    } else {
+      mother.collision(core)
     }
     moveMap(core, chiharu, 'chiharuRoom', stairs)
     keepMapCenter(core, stage, map, chiharu)
