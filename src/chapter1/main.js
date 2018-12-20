@@ -12,10 +12,10 @@ function chapter1(core, stageName) {
     let chiharu = {}
     if (!stageName) {
       const startScene = startChapter(1)
-      chiharu = new Human(core, 'Chiharu', images[1], start, 1, 7)
+      chiharu = new Human(core, map, 'Chiharu', images[1], start, 1, 7)
     } else {
       const { x, y } = stairs[2]
-      chiharu = new Human(core, 'Chiharu', images[1], { x: x - 16, y: y }, 1, 7)
+      chiharu = new Human(core, map, 'Chiharu', images[1], { x: x - 16, y: y }, 1, 7)
     }
     const stage = new Scene()
     addChilds(stage, [map, forergoundMap, chiharu])
@@ -28,8 +28,8 @@ function chapter1(core, stageName) {
     const { stairs, door } = living
     const [map, forergoundMap] = setStage(core, living, images[0])
     const { x, y } = stairs[1]
-    const chiharu = new Human(core, 'Chiharu', images[1], { x: x + 16, y: y }, 1, 7)
-    const mother = new Human(core, 'Mom', images[1], {x: 5 * 16 + 12, y: 5 * 16 }, 5, 7)
+    const chiharu = new Human(core, map, 'Chiharu', images[1], { x: x + 16, y: y }, 1, 7)
+    const mother = new Human(core, map, 'Mom', images[1], {x: 5 * 16 + 12, y: 5 * 16 }, 5, 7)
 
     const stage = new Scene()
     addChilds(stage, [map, forergoundMap, chiharu, mother])
