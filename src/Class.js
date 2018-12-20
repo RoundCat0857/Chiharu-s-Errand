@@ -1,16 +1,17 @@
 const Human = enchant.Class.create(enchant.Sprite, {
-  initialize: function(core, name, imagePath, start, char, frame, direction){
+  initialize: function(core, map, name, imagePath, start, char, frame, direction){
     enchant.Sprite.call(this, 24, 32);
     this.x = start.x
     this.y = start.y
     this.vx = this.vy = 0
     const image = new Surface(72, 128)
-    image.draw(core.assets['../image/' + imagePath], (char%4) * 72, Math.floor(char / 4) * 128, 72, 128, 0, 0, 72, 128)
+    image.draw(core.assets['../image/' + imagePath], (char % 4) * 72, Math.floor(char / 4) * 128, 72, 128, 0, 0, 72, 128)
     this.image = image
     this.frame = frame
     this.direction = direction || 2
     this.walk = 1
     this.isMoving = true
+    map.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
     this.addEventListener('enterframe', function move() {
       let eventNames = []
       if (this._listeners.enterframe) {
@@ -19,9 +20,9 @@ const Human = enchant.Class.create(enchant.Sprite, {
         })
       }
       if(this.isMoving && (eventNames.includes('walk') || eventNames.includes('walkTo'))) {
-        core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 0
+        map.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 0
         this.moveBy(this.vx, this.vy)
-        core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
+        map.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
         this.frame = this.direction * 3 + this.walk
         if (!(core.frame % 3)) {
           this.walk += 1
@@ -62,6 +63,7 @@ const Human = enchant.Class.create(enchant.Sprite, {
   pause: function(eventName) {
     for (let e of this._listeners.enterframe) {
       if (e.name === eventName) {
+        this.frame = this.direction * 3 + 1
         this.removeEventListener('enterframe', e)
       }
     }
