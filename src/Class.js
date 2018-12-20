@@ -12,7 +12,13 @@ const Human = enchant.Class.create(enchant.Sprite, {
     this.walk = 1
     this.isMoving = true
     this.addEventListener('enterframe', function move() {
-      if(this.isMoving) {
+      let eventNames = []
+      if (this._listeners.enterframe) {
+        eventNames = Object.values(this._listeners.enterframe).map((e) => {
+          return e.name
+        })
+      }
+      if(this.isMoving && (eventNames.includes('walk') || eventNames.includes('walkTo'))) {
         core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 0
         this.moveBy(this.vx, this.vy)
         core.currentScene.firstChild.collisionData[this.y / 16 + 1][(this.x - 12) / 16 + 1] = 1
@@ -21,9 +27,9 @@ const Human = enchant.Class.create(enchant.Sprite, {
           this.walk += 1
           this.walk %= 3
         }
-        this.isMoving = false
         this.vx = this.vy = 0
       }
+      this.isMoving = false
     })
   },
   walking: function(core, map) {
@@ -53,20 +59,20 @@ const Human = enchant.Class.create(enchant.Sprite, {
       }
     })
   },
-  pause: function(core, map) {
+  pause: function(eventName) {
     for (let e of this._listeners.enterframe) {
-      if (e.name === 'walk') {
+      if (e.name === eventName) {
         this.removeEventListener('enterframe', e)
       }
     }
   },
   walkTo: function(x, y) {
     return new Promise((resolve, reject) => {
-      this.addEventListener('enterframe', function() {
+      this.addEventListener('enterframe', function walkTo() {
         const { age } = this
         if (this.x === x && this.y === y) {
           this.frame = Math.floor(this.frame / 3) * 3 + 1
-          this.clearEventListener('enterframe')
+          this.pause('walkTo')
           resolve(true)
         } else {
           this.isMoving = true
