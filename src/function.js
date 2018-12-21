@@ -10,6 +10,13 @@ function setSprite(core, path, width, height) {
   return sprite
 }
 
+function setTextbox (core) {
+  const sprite = setSprite(core, '../image/texture/message.png', 320, 160)
+  sprite.y = 158
+  sprite.scale(1.0, 0.5)
+  return sprite
+}
+
 function addText(str, x, y, font, color) {
   const text = new Label(str)
   if (font) {
@@ -27,8 +34,20 @@ function addText(str, x, y, font, color) {
   return text
 }
 
-function setCommunication() {
-
+async function setCommunication(core, stage, comObj) {
+  const communication = new Scene()
+  const textbox = setTextbox(core)
+  communication.addChild(textbox)
+  for (let id in comObj) {
+    const obj = comObj[id]
+    const speaker = addText(obj.speaker, 60, textbox.y + 16 - core.currentScene.y)
+    const text = addText(obj.text, 60, textbox.y + 32 - core.currentScene.y)
+    addChilds(communication, [speaker, text])
+    stage.addChild(communication)
+    await waitZ(core)
+    removeChilds(communication, [speaker, text])
+  }
+  communication.removeChild(textbox)
 }
 
 function setSelector() {
@@ -42,6 +61,12 @@ function startChapter(n) {
 function addChilds(stage, arr) {
   arr.forEach((obj) => {
     stage.addChild(obj)
+  })
+}
+
+function removeChilds(stage, arr) {
+  arr.forEach((obj) => {
+    stage.removeChild(obj)
   })
 }
 
@@ -69,4 +94,19 @@ function setMap(core, mapArray, image) {
   map.image = core.assets['../image/' + image]
   map.loadData(mapArray)
   return map
+}
+
+function waitZ (core, obj) {
+  return new Promise((resolve, reject) => {
+    if (obj) {
+      console.log(obj);
+      resolve()
+    } else {
+      core.addEventListener('keydown', (key) => {
+        if (key.key === 'z' || key.key === ' ') {
+          resolve()
+        }
+      })
+    }
+  })
 }
