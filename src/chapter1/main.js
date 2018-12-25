@@ -12,11 +12,6 @@ function chapter1(core, stageName) {
     let chiharu = {}
     const { x, y } = stairs[2]
     if (!stageName) {
-      for (let e of core._listeners.keydown) {
-        if (e.name === 'start') {
-          core.removeEventListener('keydown', e)
-        }
-      }
       const startScene = startChapter(1)
       chiharu = new Human(core, map, 'Chiharu', images[1], start, 1, 7)
       chiharu.walkTo(x, y)
