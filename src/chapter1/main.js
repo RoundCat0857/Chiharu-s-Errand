@@ -12,6 +12,11 @@ function chapter1(core, stageName) {
     let chiharu = {}
     const { x, y } = stairs[2]
     if (!stageName) {
+      for (let e of core._listeners.keydown) {
+        if (e.name === 'start') {
+          core.removeEventListener('keydown', e)
+        }
+      }
       const startScene = startChapter(1)
       chiharu = new Human(core, map, 'Chiharu', images[1], start, 1, 7)
       chiharu.walkTo(x, y)
@@ -40,8 +45,12 @@ function chapter1(core, stageName) {
         carrot = 1
         chiharu.pause('walk')
         await mother.walkTo(this.x - 16, this.y)
-        await setCommunication(core, stage, firstTalk)
-        chiharu.walking(core, map)
+        const choice = await setCommunication(core, stage, firstTalk)
+        if (choice === 1) {
+          chiharu.walking(core, map)
+        } else {
+          window.open('about:blank','_self').close()
+        }
       }
     })
 
