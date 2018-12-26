@@ -1,7 +1,7 @@
 enchant()
 
 let { carrot } = flags.chapter1
-const { chiharuRoom, living } = maps.chapter1
+const { chiharuRoom, living, town } = maps.chapter1
 const { firstTalk } = communications.chapter1
 const images = ['texture/interior1.png', 'texture/char_p03.png']
 
@@ -38,25 +38,34 @@ function chapter1(core, stageName) {
     chiharu.addEventListener('enterframe', async function() {
       if (this.x === 9 * 16 + 12 && !carrot) {
         carrot = 1
-        chiharu.pause('walk')
+        this.pause('walk')
         await mother.walkTo(this.x - 16, this.y)
         const choice = await setCommunication(core, stage, firstTalk)
         if (choice === 1) {
-          chiharu.walking(core, map)
+          this.walking(core, map)
         } else {
           window.open('about:blank','_self').close()
         }
       }
     })
-
     moveMap(core, chiharu, 'chiharuRoom', stairs)
+    moveMap(core, chiharu, 'town', door)
     keepMapCenter(core, stage, map, chiharu)
+  } else if ('town') {
+    const { stairs, door } = town
+    const [map, forergoundMap] = setStage(core, town, images[0])
+    const { x, y } = door[1]
+    const chiharu = new Human(core, map, 'Chiharu', images[1], { x: x + 16, y: y }, 1, 7)
+
+    const stage = new Scene()
+    addChilds(stage, [map, forergoundMap, chiharu])
+    core.pushScene(stage)
   }
 }
 
 function moveMap(core, chiharu, mapName, start) {
   chiharu.addEventListener('enterframe', function () {
-    if (this.x === start[1].x && (this.y === start[1].y || this.y === start[2].y)) {
+    if ((this.x === start[1].x || this.x === start[2].x) && (this.y === start[1].y || this.y === start[2].y)) {
       chapter1(core, mapName)
     }
   })
