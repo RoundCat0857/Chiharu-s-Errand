@@ -8,10 +8,11 @@ window.onload = function () {
     const menu = startMenu(core)
     core.currentScene.addChild(menu)
     const selector = menu.lastChild.lastChild
-    document.addEventListener('keydown', function(e) {
+    core.addEventListener('keydown', function start(e) {
       if (e.keyCode === 13) {
         switch(selector.y) {
           case 54:
+            removeEvent(core, 'keydown', 'start')
             chapter1(core)
             break
           case 72:
@@ -52,17 +53,17 @@ function menuSelector(core, object) {
   text.textAlign = "center"
   text.addEventListener('enterframe', function() {
     if (core.input.down) {
-      if (text.y >= 90) {
-        text.y = 54
+      if (this.y >= 90) {
+        this.y = 54
       } else {
-        text.y += 18
+        this.y += 18
       }
     }
     if (core.input.up) {
-      if (text.y <= 54) {
-        text.y = 90
+      if (this.y <= 54) {
+        this.y = 90
       } else {
-        text.y -= 18
+        this.y -= 18
       }
     }
   })
