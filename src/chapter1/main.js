@@ -3,7 +3,7 @@ enchant()
 let { carrot } = flags.chapter1
 const { chiharuRoom, living, town } = maps.chapter1
 const { firstTalk } = communications.chapter1
-const images = ['texture/interior1.png', 'texture/char_p03.png']
+const images = ['texture/interior1.png', 'texture/char_p03.png','texture/town.png']
 
 function chapter1(core, stageName) {
   if (!stageName || stageName === 'chiharuRoom') {
@@ -53,7 +53,7 @@ function chapter1(core, stageName) {
     keepMapCenter(core, stage, map, chiharu)
   } else if ('town') {
     const { stairs, door } = town
-    const [map, forergoundMap] = setStage(core, town, images[0])
+    const [map, forergoundMap] = setStage(core, town, images[2])
     const { x, y } = door[1]
     const chiharu = new Human(core, map, 'Chiharu', images[1], { x: x + 16, y: y }, 1, 7)
 
