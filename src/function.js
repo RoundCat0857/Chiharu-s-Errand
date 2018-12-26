@@ -38,20 +38,58 @@ async function setCommunication(core, stage, comObj) {
   const communication = new Scene()
   const textbox = setTextbox(core)
   communication.addChild(textbox)
+  let choice_ = 0
   for (let id in comObj) {
-    const obj = comObj[id]
-    const speaker = addText(obj.speaker, 60, textbox.y + 16 - core.currentScene.y)
-    const text = addText(obj.text, 60, textbox.y + 32 - core.currentScene.y)
+    const talk = comObj[id]
+    const speaker = addText(talk.speaker, 60, textbox.y + 16 - core.currentScene.y)
+    const text = addText(talk.text, 60, textbox.y + 32 - core.currentScene.y)
     addChilds(communication, [speaker, text])
     stage.addChild(communication)
-    await waitZ(core)
+    choice_ = await waitZ(core, talk.selection)
     removeChilds(communication, [speaker, text])
   }
   communication.removeChild(textbox)
+  return choice_
 }
 
-function setSelector() {
-
+function setSelector(core, obj) {
+  return new Promise((resolve, reject) => {
+    const selector = new Scene()
+    const textbox = setTextbox(core)
+    textbox.scale(0.2, 0.8)
+    textbox.x = 128
+    textbox.y = 94
+    const childs = [textbox]
+    const choiceY = textbox.y + 28 - core.currentScene.y
+    for (let id in obj) {
+      const choice = addText(obj[id], 150 + textbox.x, choiceY + (id - 1) * 24)
+      childs.push(choice)
+    }
+    const mark = addText('▶︎', 134 + textbox.x, choiceY)
+    mark.addEventListener('enterframe', function () {
+      if (core.input.down) {
+        if (this.y < choiceY + 24) {
+          this.y += 24
+        }
+      }
+      if (core.input.up) {
+        if (this.y > choiceY) {
+          this.y -= 24
+        }
+      }
+    })
+    childs.push(mark)
+    addChilds(selector, childs)
+    core.currentScene.addChild(selector)
+    core.addEventListener('keydown', function select(key) {
+      if (key.key === 'z' || key.key === ' ') {
+        const select = (mark.y - choiceY) / 24 + 1
+        removeChilds(selector, childs)
+        removeEvent(core, 'keydown', 'select')
+        resolve(select)
+      }
+    })
+  })
 }
 
 function startChapter(n) {
@@ -72,11 +110,11 @@ function removeChilds(stage, arr) {
 
 function keepMapCenter(core, stage, map, player) {
   core.currentScene.addEventListener('enterframe', function(e) {
-    var x = Math.min((core.width  - 32) / 2 - player.x, 0) // playerの位置がマップ半分まで到達？
+    var x = Math.min((core.width  - 32) / 2 - player.x, 0)
     var y = Math.min((core.height - 32) / 2 - player.y, 0)
-    x = Math.max(core.width , x + map.width)  - map.width // playerの位置がマップ右端まで到達？
+    x = Math.max(core.width , x + map.width)  - map.width
     y = Math.max(core.height, y + map.height) - map.height
-    stage.x = x // stageの座標をセット
+    stage.x = x
     stage.y = y
   })
 }
@@ -97,16 +135,25 @@ function setMap(core, mapArray, image) {
 }
 
 function waitZ (core, obj) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     if (obj) {
-      console.log(obj);
-      resolve()
+      const choice = await setSelector(core, obj)
+      resolve(choice)
     } else {
-      core.addEventListener('keydown', (key) => {
+      core.addEventListener('keydown', function next(key) {
         if (key.key === 'z' || key.key === ' ') {
-          resolve()
+          removeEvent(core, 'keydown', 'next')
+          resolve(1)
         }
       })
     }
   })
+}
+
+function removeEvent(node, type, name) {
+  for (let e of node._listeners[type]) {
+    if (e.name === name) {
+      node.removeEventListener(type, e)
+    }
+  }
 }
